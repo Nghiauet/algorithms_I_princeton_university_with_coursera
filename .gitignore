@@ -1,0 +1,5 @@
+lib/*
+.vscode
+hello/*
+*.zip
+*.class
