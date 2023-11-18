@@ -3,3 +3,4 @@ lib/*
 hello/*
 *.zip
 *.class
+libs/algs4.jar
