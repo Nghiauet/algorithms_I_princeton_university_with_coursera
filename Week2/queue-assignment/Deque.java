@@ -6,14 +6,16 @@ public class Deque<Item> implements Iterable<Item> {
     private MagicNode<Item> first;
     private MagicNode<Item> last;
     private int size;
+
     private class MagicNode<Item> {
         Item data;
         MagicNode<Item> next;
         MagicNode<Item> prev;
     }
+
     private class DequeIterator<item> implements Iterator<Item> {
         private MagicNode<Item> current;
-        
+
         private DequeIterator(MagicNode<Item> item) {
             current = item;
         }
@@ -31,6 +33,7 @@ public class Deque<Item> implements Iterable<Item> {
             return data;
         }
     }
+
     public Deque() {
         this.first = null;
         this.last = null;
@@ -46,6 +49,9 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     public void addFirst(Item data) {
+        if (data == null) {
+            throw new IllegalArgumentException("IllegalArgumentException for addFirst");
+        }
         MagicNode<Item> temp = new MagicNode<>();
         temp.data = data;
         if (isEmpty()) {
@@ -59,6 +65,9 @@ public class Deque<Item> implements Iterable<Item> {
     }
 
     public void addLast(Item data) {
+        if (data == null) {
+            throw new IllegalArgumentException("IllegalArgumentException for addLast");
+        }
         MagicNode<Item> temp = new MagicNode<>();
         temp.data = data;
         if (isEmpty()) {
@@ -83,7 +92,6 @@ public class Deque<Item> implements Iterable<Item> {
             first.prev = null;
         }
         size--;
-        System.out.println("removeFirst pop: " + data);
         return data;
     }
 
@@ -99,12 +107,13 @@ public class Deque<Item> implements Iterable<Item> {
             last.next = null;
         }
         size--;
-        System.out.println("removeLast pop: " + data);
         return data;
     }
+
     public Iterator<Item> iterator() {
         return new DequeIterator<>(first);
     }
+
     public static void main(String[] args) {
         Deque<Integer> deque = new Deque<>();
         deque.addFirst(4);
@@ -113,18 +122,9 @@ public class Deque<Item> implements Iterable<Item> {
         deque.addLast(3);
         deque.addLast(2);
         deque.addLast(1);
-        // deque.removeFirst();
-        // deque.removeFirst();
-        // deque.removeFirst();
-        // deque.removeFirst();
-        // deque.removeFirst();
-        // deque.removeFirst();
-        // deque.removeFirst();
-        // deque.removeFirst();
-        // iterator 
         Iterator<Integer> iterator = deque.iterator();
         while (iterator.hasNext()) {
-            StdOut.println(iterator.next());
+        StdOut.println(iterator.next());
         }
     }
 }
