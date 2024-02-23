@@ -10,47 +10,38 @@ public class FastCollinearPoints {
 
     // Line segments - array list representation
     private ArrayList<LineSegment> lineSegmentsArrayList = new ArrayList<>();
-    // slope list
-    private ArrayList<Double> slopes = new ArrayList<>();
 
     public FastCollinearPoints(Point[] points) {
         // copy the array
-        if (points == null)
-            throw new IllegalArgumentException("Points array can't be null or contain null values");
+        validateInput(points);
 
         Point[] pointsCopy = Arrays.copyOf(points, points.length);
-        for (int i = 0; i < points.length; i++) {
-            if (points[i] == null)
-                throw new IllegalArgumentException("Points array can't be null or contain null values");
-        }
         Arrays.sort(pointsCopy);
 
-        Point[] startPoints = Arrays.copyOf(pointsCopy, points.length);
+        checkDuplicatePoints(pointsCopy);
+
         // check for null and duplicate points
-        for (int i = 0; i < pointsCopy.length - 1; i++) {
-            if (pointsCopy[i].compareTo(pointsCopy[i + 1]) == 0)
-                throw new IllegalArgumentException("Duplicate points found");
-        }
         if (points.length < 4) {
             lineSegments = new LineSegment[0];
             return;
         }
         // Find line segments
+        Point[] startPoints = Arrays.copyOf(pointsCopy, points.length);
         for (int i = 0; i < startPoints.length; i++) {
             // Sort points by slope relative to the origin
             Point start = startPoints[i];
             // Sort by 2 cretieria
             Arrays.sort(pointsCopy, start.slopeOrder());
-            Boolean flag = true;
-            if (pointsCopy.length <2 || pointsCopy[1] == null)
+            boolean flag = true;
+            if (pointsCopy[1] == null)
                 break;
-            Double slope1 = start.slopeTo(pointsCopy[1]);
-            Double slope2;
+            double slope1 = start.slopeTo(pointsCopy[1]);
+            double slope2;
             int count = 1;
             Point end = null;
             for (int j = 2; j < pointsCopy.length; j++) {
                 slope2 = start.slopeTo(pointsCopy[j]);
-                if (slope2.equals(slope1)) {
+                if (slope2 == slope1) {
 
                     if (count == 1) {
                         end = pointsCopy[j - 1];
@@ -68,7 +59,7 @@ public class FastCollinearPoints {
                         end = pointsCopy[j];
                     }
                 } else {
-                    if (count >= 4 && Boolean.TRUE.equals(flag)) {
+                    if (count >= 4 && flag) {
                         lineSegmentsArrayList.add(new LineSegment(start, end));
                     }
                     flag = true;
@@ -77,7 +68,7 @@ public class FastCollinearPoints {
                     end = null;
                 }
             }
-            if (count >= 4 && Boolean.TRUE.equals(flag)) {
+            if (count >= 4 && flag) {
                 lineSegmentsArrayList.add(new LineSegment(start, end));
             }
         }
@@ -86,6 +77,22 @@ public class FastCollinearPoints {
 
     public int numberOfSegments() {
         return lineSegments.length;
+    }
+
+    private void validateInput(Point[] points) {
+        if (points == null)
+            throw new IllegalArgumentException("Points array can't be null or contain null values");
+        for (int i = 0; i < points.length; i++) {
+            if (points[i] == null)
+                throw new IllegalArgumentException("Points array can't be null or contain null values");
+        }
+    }
+
+    private void checkDuplicatePoints(Point[] points) {
+        for (int i = 0; i < points.length - 1; i++) {
+            if (points[i].compareTo(points[i + 1]) == 0)
+                throw new IllegalArgumentException("Duplicate points found");
+        }
     }
 
     public LineSegment[] segments() // the line segments
