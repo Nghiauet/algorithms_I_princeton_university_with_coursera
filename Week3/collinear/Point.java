@@ -64,12 +64,13 @@ public class Point implements Comparable<Point> {
         if (this.y == that.y) {
             if (this.x == that.x)
                 return Double.NEGATIVE_INFINITY;
-            if (this.y != that.y)
+            if (this.y == that.y)
                 return 0.0;
+
         }
         if (this.x == that.x)
             return Double.POSITIVE_INFINITY;
-        return (that.y - this.y) / (that.x - this.x);
+        return (double) (that.y - this.y) / (that.x - this.x);
     }
 
     /**
@@ -134,20 +135,8 @@ public class Point implements Comparable<Point> {
     public static void main(String[] args) {
         /* YOUR CODE HERE */
         // test compareTo
-        Point p1 = new Point(1, 2);
-        Point p2 = new Point(1, 3);
-        Point p3 = new Point(2, 2);
-        System.out.println(p1.compareTo(p2)); // -1
-        System.out.println(p1.compareTo(p3)); // -1
-        System.out.println(p2.compareTo(p3)); // 1
-        System.out.println(p1.compareTo(p1)); // 0
-        // test slopeTo
-        System.out.println(p1.slopeTo(p2)); // POSITIVE_INFINITY
-        System.out.println(p1.slopeTo(p3)); // 0.0
-        System.out.println(p2.slopeTo(p3)); // (2 - 3) / ( 2 - 1) = -1.0
-        // test slopeOrder
-        Comparator<Point> c = p1.slopeOrder();
-        System.out.println(c.compare(p2, p3)); // POSITIVE_INFINITY > 0.0
+
+
 
     }
 }
