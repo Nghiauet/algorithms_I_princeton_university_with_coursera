@@ -1,5 +1,7 @@
 import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.StdOut;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Board {
 
@@ -65,10 +67,10 @@ public class Board {
             for (int j = 0; j < n; j++) {
                 if ((i == (n - 1)) && j == (n - 1)) {
                     if (this.boardTiles[i][j] != 0) {
-                        count+= manhattanDistance(i,j,n*n);
+                        count += manhattanDistance(i, j, n * n);
                     }
                 } else if (boardTiles[i][j] != (i) * n + j + 1) {
-                    count+= manhattanDistance(i,j,boardTiles[i][j]);
+                    count += manhattanDistance(i, j, boardTiles[i][j]);
                 }
             }
         }
@@ -97,11 +99,11 @@ public class Board {
 
     // does this board equal y?
     public boolean equals(Object y) {
-        if (this == y){
+        if (this == y) {
             return true;
         }
 
-        if (y== null || !(y instanceof Board)) {
+        if (y == null || !(y instanceof Board)) {
             return false;
         }
         Board other = (Board) y;
@@ -117,13 +119,106 @@ public class Board {
         return true;
     }
 
+    private int[][] copyBoard(int[][] board) {
+        int[][] copyBoard = new int[n][n];
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                copyBoard[i][j] = board[i][j];
+            }
+        }
+        return copyBoard;
+    }
+
+    public int[][] swap(int[][] board, int i, int j, int swap_i, int swap_j) {
+        int[][] temp = copyBoard(board);
+        int temp_value = temp[i][j];
+        temp[i][j] = temp[swap_i][swap_j];
+        temp[swap_i][swap_j] = temp_value;
+        return temp;
+    }
+
     // all neighboring boards
-    // public Iterable<Board> neighbors() {
-    // }
+    public Iterable<Board> neighbors() {
+        int zero_i = -1;
+        int zero_j = -1;
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (this.boardTiles[i][j] == 0) {
+                    zero_i = i;
+                    zero_j = j;
+                    break;
+                }
+            }
+        }
+        // if (zero_i == -1) || (zero_j == -1){
+        // return null;
+        // }
+
+        List<Board> neighbors = new ArrayList<>();
+        // System.out.println("this board: " + this.toString());
+
+        if (zero_i > 0) {
+            int[][] newBoard = swap(this.boardTiles, zero_i, zero_j, zero_i - 1, zero_j);
+            // System.out.println("possition: " + zero_i + " " +  zero_j + " " + zero_i + " " + zero_j );
+
+            neighbors.add(new Board(newBoard));
+            // System.out.println("newBoard board: " + new Board(newBoard).toString());
+        }
+        if (zero_j > 0) {
+            int[][] newBoard = swap(this.boardTiles, zero_i, zero_j, zero_i, zero_j -1 );
+            neighbors.add(new Board(newBoard));
+            // System.out.println("newBoard board: " + new Board(newBoard).toString());
+
+        }
+        if (zero_i < n - 1) {
+            int[][] newBoard = swap(this.boardTiles, zero_i, zero_j, zero_i+1, zero_j);
+            neighbors.add(new Board(newBoard));
+            // System.out.println("newBoard board: " + new Board(newBoard).toString());
+
+        }
+        if (zero_j < n - 1) {
+
+            int[][] newBoard = swap(this.boardTiles, zero_i, zero_j, zero_i , zero_j+1);
+            neighbors.add(new Board(newBoard));
+            // System.out.println("newBoard board: " + new Board(newBoard).toString());
+
+        }
+        return neighbors;
+    }
 
     // a board that is obtained by exchanging any pair of tiles
-    // public Board twin() {
-    // }
+    public Board twin() {
+        int[][] twin = copyBoard(this.boardTiles);
+        // System.out.println("orignal : "+ new Board(twin).toString());
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                if (twin[i][j] != 0 && (j<n-1) && twin[i][j+1] != 0) {
+                    twin = swap(twin, i, j, i, j+1);
+                    // System.out.println("twin : " + new Board(twin).toString());
+
+                    return new Board(twin);
+                }
+                else if (twin[i][j] != 0 && (i<n-1) && twin[i+1][j] != 0) {
+                    twin = swap(twin, i, j, i+1, j);
+                    // System.out.println("twin : " + new Board(twin).toString());
+
+                    return new Board(twin);
+                }
+                else if (twin[i][j] != 0 && (i>0) && twin[i-1][j] != 0) {
+                    twin = swap(twin, i, j, i-1, j);
+                    // System.out.println("twin : " + new Board(twin).toString());
+
+                    return new Board(twin);
+                }
+                else if (twin[i][j] != 0 && (j>0) && twin[i][j-1] != 0) {
+                    twin = swap(twin, i, j, i, j-1);
+                    // System.out.println("twin : " + new Board(twin).toString());
+
+                    return new Board(twin);
+                }            }
+        }
+        return null;
+    }
 
     // unit testing (not graded)
     public static void main(String[] args) {
