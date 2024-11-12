@@ -18,7 +18,6 @@
  *  ...
  *  puzzle3x3-impossible: -1
  *  ...
- *  puzzle42.txt: 42
  *  puzzle43.txt: 43
  *  puzzle44.txt: 44
  *  puzzle45.txt: 45

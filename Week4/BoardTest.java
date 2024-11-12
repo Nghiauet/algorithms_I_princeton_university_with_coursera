@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
+
+import edu.princeton.cs.algs4.StdOut;
 public class BoardTest {
 
     // Helper method to print test result
@@ -83,12 +85,13 @@ public class BoardTest {
     }
     // Test case for the neighbors method
     public static void testNeighbors() {
-        int[][] tiles = {{1, 2, 3}, {4, 0, 5}, {6, 7, 8}};  // The empty tile (0) is at position (1,1)
+        int[][] tiles = {{1, 2, 3}, {4, 5, 6}, {7, 0, 8}};  // The empty tile (0) is at position (1,1)
         Board board = new Board(tiles);
 
         List<Board> neighborsList = new ArrayList<>();
         for (Board neighbor : board.neighbors()) {
             neighborsList.add(neighbor);
+            StdOut.print(neighbor.toString());
         }
 
         // We expect 4 possible neighbors by moving the empty tile (up, down, left, right)
@@ -207,7 +210,7 @@ public class BoardTest {
         // testEquals();
 
         // Add any new tests here, if necessary
-        // testNeighbors();  // Run the test for neighbors
+        testNeighbors();  // Run the test for neighbors
         testTwin();  // Run the test for twin
 
         System.out.println("All tests finished.");
