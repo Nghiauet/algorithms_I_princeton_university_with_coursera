@@ -1,4 +1,3 @@
-import edu.princeton.cs.algs4.In;
 import edu.princeton.cs.algs4.MinPQ;
 import edu.princeton.cs.algs4.StdOut;
 
@@ -37,13 +36,13 @@ public class Solver {
         if (initial == null) {
             throw new IllegalArgumentException("Initial board cannot be null");
         }
-        
+
         // Get twin board for parallel solving
         Board twinBoard = initial.twin();
         if (twinBoard == null) {
             throw new IllegalArgumentException("Twin board cannot be null");
         }
-        
+
         // Initialize search nodes and priority queues for both original and twin boards
         SearchNode searchNode = new SearchNode(initial, null, 0);
         SearchNode twinSearchNode = new SearchNode(twinBoard, null, 0);
@@ -53,7 +52,7 @@ public class Solver {
         // Insert initial nodes
         priorityQueue.insert(searchNode);
         twinPriorityQueue.insert(twinSearchNode);
-    
+
         SearchNode finalNode = null;
         boolean solved = false;
         boolean twinSolved = false;
@@ -62,7 +61,7 @@ public class Solver {
         while (!solved && !twinSolved) {
             SearchNode current = priorityQueue.delMin();
             SearchNode twinCurrent = twinPriorityQueue.delMin();
-            
+
             // Check if current state is goal state
             if (current.board.isGoal()) {
                 finalNode = current;
